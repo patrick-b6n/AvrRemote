@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+      
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
+        <PackageReference Include="Rssdp" Version="4.0.4" />
+        <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
+        <PackageReference Include="System.Text.Json" Version="6.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
+        <PackageReference Include="Telnet" Version="0.8.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AvrRemote.Shared\AvrRemote.Shared.csproj" />
+        <ProjectReference Include="..\AvrRemote.UI\AvrRemote.UI.csproj" />
+    </ItemGroup>
+
+</Project>

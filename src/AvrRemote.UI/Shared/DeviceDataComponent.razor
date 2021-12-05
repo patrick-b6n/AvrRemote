@@ -1,0 +1,236 @@
+﻿@using AvrRemote.Shared.Features.Devices
+@using AvrRemote.Shared.Features.Data
+@using AvrRemote.Shared.Features.Command
+
+<div>
+    <span class="font-bold text-xl">@SelectedDevice.Name</span>
+</div>
+
+@if (_deviceData != null)
+{
+    <div class="relative">
+        @if (_isLoadingDeviceInformation)
+        {
+            <div class="absolute bg-gray-50 bg-opacity-80 backdrop-blur-sm -inset-1">
+                <div class="flex justify-center">
+                    <text>Loading...</text>
+                </div>
+            </div>
+        }
+
+        <div class="flex">
+            <div class="flex-1">
+                <div class="flex items-center">
+                    <div class="flex-1">
+                        <span>Main Zone</span>
+                    </div>
+                    <div class="flex-shrink-0 mx-5">
+                        @switch (_deviceData.MainZoneState)
+                        {
+                            case ZoneState.Unknown:
+                                <Button BackgroundColor="Button.ButtonBackgroundColor.Blue">
+                                    <span class="oi oi-question-mark">X</span>
+                                </Button>
+                                break;
+                            case ZoneState.Off:
+                                <Button BackgroundColor="Button.ButtonBackgroundColor.Red" OnClickCallback="@(async () => await MainZoneOn())">
+                                    <span class="oi oi-power-standby">X</span>
+                                </Button>
+                                break;
+                            case ZoneState.On:
+                                <Button BackgroundColor="Button.ButtonBackgroundColor.Green" OnClickCallback="@(async () => await MainZoneOff())">
+                                    <span class="oi oi-power-standby">X</span>
+                                </Button>
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-5">
+            <hr/>
+        </div>
+
+        <div class="flex">
+            <div class="flex-1">
+                Master Volume
+            </div>
+            <div class="flex-shrink-0 text-right">
+                @_masterVolume
+            </div>
+        </div>
+
+        <div class="flex">
+            <div class="flex-1">
+                <input type="range"
+                       class="form-control-range w-full"
+                       min="0" max="98"
+                       value="@_masterVolume"
+                       @oninput="@CreateMasterVolumeInputCallback()"
+                       @onchange="@CreateMasterVolumeChangedCallback()">
+            </div>
+        </div>
+
+        <div class="my-5">
+            <hr/>
+        </div>
+
+        <div class="flex">
+            <div class="flex-1">
+                Subwoofer Level
+            </div>
+            <div class="flex-shrink-0 text-right">
+                @_subwooferLevel
+            </div>
+        </div>
+
+        <div class="flex">
+            <div class="flex-1">
+                <input type="range"
+                       class="form-control-range w-full"
+                       min="-12" max="12"
+                       value="@_subwooferLevel"
+                       @oninput="@CreateSubwooferLevelInputCallback()"
+                       @onchange="@CreateMasterVolumeChangedCallback()">
+            </div>
+        </div>
+
+        <div class="my-5">
+            <hr/>
+        </div>
+
+        <div class="flex items-center">
+            <div class="flex-1">
+                <span>Main Zone</span>
+            </div>
+            <div class="flex-shrink-0 mx-5">
+                @switch (_deviceData.MuteState)
+                {
+                    case MuteState.Unknown:
+                        <Button BackgroundColor="Button.ButtonBackgroundColor.White" disabled>
+                            <span class="oi oi-question-mark">X</span>
+                        </Button>
+                        break;
+                    case MuteState.MuteOff:
+                        <Button BackgroundColor="Button.ButtonBackgroundColor.White" OnClickCallback="@(async () => await Mute())">
+                            <span class="oi oi-volume-high" style="width: 20px">X</span>
+                        </Button>
+                        break;
+                    case MuteState.MuteOn:
+                        <Button BackgroundColor="Button.ButtonBackgroundColor.White" OnClickCallback="@(async () => await Unmute())">
+                            <span class="oi oi-volume-off" style="width: 20px">X</span>
+                        </Button>
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public DeviceDto SelectedDevice { get; set; } = null!;
+
+    private DeviceDataDto? _deviceData;
+    private string _masterVolume = "0";
+    private string _subwooferLevel = "0";
+    private bool _isLoadingDeviceInformation;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await RefreshDeviceInformation(SelectedDevice);
+    }
+
+    private async Task Mute()
+    {
+        await _http.PutAsync($"{CommandRoutes.Mute}?ip={SelectedDevice.Ip}", null);
+        await RefreshDeviceInformation(SelectedDevice);
+    }
+
+    private async Task Unmute()
+    {
+        await _http.PutAsync($"{CommandRoutes.Unmute}?ip={SelectedDevice.Ip}", null);
+        await RefreshDeviceInformation(SelectedDevice);
+    }
+
+    private async Task MainZoneOn()
+    {
+        await _http.PutAsync($"{CommandRoutes.MainZoneOn}?ip={SelectedDevice.Ip}", null);
+        await RefreshDeviceInformation(SelectedDevice);
+    }
+
+    private async Task MainZoneOff()
+    {
+        await _http.PutAsync($"{CommandRoutes.MainZoneOff}?ip={SelectedDevice.Ip}", null);
+        await RefreshDeviceInformation(SelectedDevice);
+    }
+
+    private EventCallback<ChangeEventArgs> CreateMasterVolumeChangedCallback()
+    {
+        return EventCallback.Factory.CreateBinder<string>(
+            this,
+            async value =>
+            {
+                await _http.PutAsync($"{CommandRoutes.SetMasterVolume}?ip={SelectedDevice.Ip}&value={value}", null);
+                await RefreshDeviceInformation(SelectedDevice);
+            },
+            _masterVolume);
+    }
+
+    private EventCallback<ChangeEventArgs> CreateMasterVolumeInputCallback()
+    {
+        return EventCallback.Factory.CreateBinder<string>
+            (
+                this,
+                value => _masterVolume = value,
+                _masterVolume
+            );
+    }
+
+    private EventCallback<ChangeEventArgs> CreateSubwooferLevelChangedCallback()
+    {
+        return EventCallback.Factory.CreateBinder<string>(
+            this,
+            async value =>
+            {
+                await _http.PutAsync($"{CommandRoutes.SetSubwooferLevel}?ip={SelectedDevice.Ip}&value={value}", null);
+                await RefreshDeviceInformation(SelectedDevice);
+            },
+            _subwooferLevel);
+    }
+
+    private EventCallback<ChangeEventArgs> CreateSubwooferLevelInputCallback()
+    {
+        return EventCallback.Factory.CreateBinder<string>
+            (
+                this,
+                value => _subwooferLevel = value,
+                _subwooferLevel
+            );
+    }
+
+    private async Task RefreshDeviceInformation(DeviceDto device)
+    {
+        _isLoadingDeviceInformation = true;
+        StateHasChanged();
+
+        _deviceData = await _http.GetFromJsonAsync<DeviceDataDto>($"api/deviceData?ip={device.Ip}");
+        if (_deviceData == null)
+        {
+            return;
+        }
+
+        _masterVolume = _deviceData.MasterVolume;
+        _subwooferLevel = (int.Parse(_deviceData.SubwooferLevel) - 50).ToString();
+
+        _isLoadingDeviceInformation = false;
+        StateHasChanged();
+    }
+
+}

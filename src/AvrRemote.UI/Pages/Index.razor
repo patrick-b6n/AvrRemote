@@ -1,0 +1,70 @@
+﻿@page "/"
+@using Microsoft.Extensions.Logging
+@using AvrRemote.Shared.Features.Devices
+
+@inject ILogger<Index> _logger
+
+<div class="mx-auto">
+
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <div class="mb-3">
+                <span class="font-bold text-xl">Devices</span>
+                <span class="cursor-pointer text-sm" @onclick="RefreshDevices">Reload</span>
+            </div>
+            <div class="bg-white border border-gray-100 shadow-md rounded px-4 py-2">
+                @if (_devices.Any())
+                {
+                    @foreach (var device in _devices)
+                    {
+                        <div class="font-bold" style="cursor: pointer" @onclick="() => SelectDevice(device)">
+                            @device.Name <br/>
+                        </div>
+                        <div>
+                            <small class="text-gray-500">(@device.Ip)</small>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div>
+                        <small class="text-gray-500">No devices found</small>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="flex-shrink-0 mx-5 border-l border-gray-200">
+        </div>
+        <div class="flex-1">
+            @if (_selectedDevice != null)
+            {
+                <DeviceDataComponent SelectedDevice="@_selectedDevice"></DeviceDataComponent>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<DeviceDto> _devices = new List<DeviceDto>();
+    private DeviceDto? _selectedDevice;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await RefreshDevices();
+    }
+
+    private async Task RefreshDevices()
+    {
+        _devices = await _http.GetFromJsonAsync<IEnumerable<DeviceDto>>("api/device") ?? Enumerable.Empty<DeviceDto>();
+        _selectedDevice ??= _devices.FirstOrDefault();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void SelectDevice(DeviceDto device)
+    {
+        _selectedDevice = device;
+    }
+
+}
