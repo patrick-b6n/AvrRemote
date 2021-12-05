@@ -1,4 +1,4 @@
-# avr-remote
+# AvrRemote
 
 ![GitHub Workflow Status](https://github.com/patrick-b6n/AvrRemote/actions/workflows/build.yml/badge.svg)
 
