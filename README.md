@@ -1,6 +1,6 @@
 # avr-remote
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/patrick-b6n/avr-remote/build)
+![GitHub Workflow Status](https://github.com/patrick-b6n/AvrRemote/actions/workflows/build.yml/badge.svg)
 
 Web UI to control your AVR (only Denon is supported).
 
