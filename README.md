@@ -2,7 +2,9 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/patrick-b6n/avr-remote/build)
 
-Web UI to control your Denon AVR.
+Web UI to control your AVR (only Denon is supported).
+
+![](.github/web-interface.png)
 
 ## Technologies
 * .NET 6

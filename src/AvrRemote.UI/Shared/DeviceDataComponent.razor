@@ -2,7 +2,7 @@
 @using AvrRemote.Shared.Features.Data
 @using AvrRemote.Shared.Features.Command
 
-<div>
+<div class="mb-3">
     <span class="font-bold text-xl">@SelectedDevice.Name</span>
 </div>
 
@@ -22,7 +22,7 @@
             <div class="flex-1">
                 <div class="flex items-center">
                     <div class="flex-1">
-                        <span>Main Zone</span>
+                        <span>Mute</span>
                     </div>
                     <div class="flex-shrink-0 mx-5">
                         @switch (_deviceData.MainZoneState)
@@ -104,7 +104,7 @@
 
         <div class="flex items-center">
             <div class="flex-1">
-                <span>Main Zone</span>
+                <span>Mute</span>
             </div>
             <div class="flex-shrink-0 mx-5">
                 @switch (_deviceData.MuteState)
