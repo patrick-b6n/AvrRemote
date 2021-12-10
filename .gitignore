@@ -16,6 +16,7 @@ riderModule.iml
 !**/.yarn/releases
 !**/.yarn/plugins
 .pnp.*
+dist/
 
 .DS_Store
 npm-debug.log*

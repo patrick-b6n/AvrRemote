@@ -2,14 +2,14 @@
 
     <Target Name="BuildFrontend-Dev" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Debug'">
         <Message Text="------- Started building wwwroot" Importance="High" />
-        <Exec Command="yarn build" />
+        <Exec Command="yarn build" WorkingDirectory="wwwroot" />
         <Message Text="------- Finished building wwwroot" Importance="High" />
     </Target>
-    
+
     <Target Name="BuildFrontend" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
         <Message Text="------- Started building wwwroot" Importance="High" />
-        <Exec Command="yarn" />
-        <Exec Command="yarn publish" />
+        <Exec Command="yarn" WorkingDirectory="wwwroot" />
+        <Exec Command="yarn publish" WorkingDirectory="wwwroot" />
         <Message Text="------- Finished building wwwroot" Importance="High" />
     </Target>
 

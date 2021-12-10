@@ -29,17 +29,17 @@
                         {
                             case ZoneState.Unknown:
                                 <Button BackgroundColor="Button.ButtonBackgroundColor.Blue">
-                                    <span class="oi oi-question-mark">X</span>
+                                    <i class="fas fa-power-off"></i>
                                 </Button>
                                 break;
                             case ZoneState.Off:
                                 <Button BackgroundColor="Button.ButtonBackgroundColor.Red" OnClickCallback="@(async () => await MainZoneOn())">
-                                    <span class="oi oi-power-standby">X</span>
+                                    <i class="fas fa-power-off"></i>
                                 </Button>
                                 break;
                             case ZoneState.On:
                                 <Button BackgroundColor="Button.ButtonBackgroundColor.Green" OnClickCallback="@(async () => await MainZoneOff())">
-                                    <span class="oi oi-power-standby">X</span>
+                                    <i class="fas fa-power-off"></i>
                                 </Button>
                                 break;
                             default:
@@ -51,7 +51,7 @@
         </div>
 
         <div class="my-5">
-            <hr/>
+            <hr class="bg-gray-500"/>
         </div>
 
         <div class="flex">
@@ -111,17 +111,19 @@
                 {
                     case MuteState.Unknown:
                         <Button BackgroundColor="Button.ButtonBackgroundColor.White" disabled>
-                            <span class="oi oi-question-mark">X</span>
+                            <i class="fas fa-question"></i>
                         </Button>
                         break;
                     case MuteState.MuteOff:
                         <Button BackgroundColor="Button.ButtonBackgroundColor.White" OnClickCallback="@(async () => await Mute())">
-                            <span class="oi oi-volume-high" style="width: 20px">X</span>
+                            <i class="fas fa-volume-mute"></i>
+
                         </Button>
                         break;
                     case MuteState.MuteOn:
                         <Button BackgroundColor="Button.ButtonBackgroundColor.White" OnClickCallback="@(async () => await Unmute())">
-                            <span class="oi oi-volume-off" style="width: 20px">X</span>
+                            <i class="fas fa-volume-up"></i>
+
                         </Button>
                         break;
                     default:
