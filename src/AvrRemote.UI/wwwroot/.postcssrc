@@ -1,0 +1,13 @@
+﻿{
+    "plugins": {
+        "postcss-import": true,
+        "postcss-purgecss": {
+            "content": [
+                "../**/*.{html,cshtml,razor}"
+            ]
+        },
+        "postcss-url": true,
+        "tailwindcss": true,
+        "autoprefixer": true
+    }
+}
