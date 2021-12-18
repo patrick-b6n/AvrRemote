@@ -51,4 +51,3 @@ yarn watch-css  # watch for css changes
 
 ## TODO
 * fix telnet glitches
-* add icons
