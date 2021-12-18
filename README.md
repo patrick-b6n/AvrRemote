@@ -42,7 +42,7 @@ dotnet watch
 **Frontend**
 ```shell
 cd ./src/AvrRemote.UI/wwwroot/
-yarn watch  # watch for css changes 
+yarn watch
 ```
 
 ## Docs
